@@ -37,8 +37,13 @@ namespace To_do_List
             Console.Title = "Console to-do list";
 
             Console.WriteLine("Welcome to the To-do tasks list!");
-            Console.Write("Please enter your name: ");
+            Console.Write("Please enter your name [ENTER for default]: ");
             person.Name = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(person.Name))
+            {
+                person.Name = "Anonymous";//nn pensei em nada melhor
+            }
 
             Console.WriteLine("User logged: {0}", person.Name);
 
@@ -46,7 +51,7 @@ namespace To_do_List
             {
                 Console.WriteLine("1. See your current task list");
                 Console.WriteLine("2. Add a new task to the current task list");
-                Console.WriteLine("");
+                Console.WriteLine("3. Remove a task from the current task list");
                 Console.WriteLine("");
                 Console.WriteLine(" \n");
 
@@ -63,6 +68,11 @@ namespace To_do_List
                 {
                     AddingToTaskList();
                 }
+                else if (userChoose == "3")
+                {
+
+                }
+
                 else
                 {
                     Console.WriteLine("\nWrong parameter, press enter to try again. . .");
@@ -97,6 +107,23 @@ namespace To_do_List
 
             Console.WriteLine("Press enter to continue. . .");//achar um meio de nn ficar repetindo isso
             Console.ReadKey();
+        }
+
+        //sla se é uma boa ideia isso, ou poderia embutir o currenttasklist a esse, porem esse apenas remove e ñ printa nada
+        static void RemovingFromList()
+            
+        {
+            Console.WriteLine("This is the current tasks listed: ");
+            for (int i = 0; i < ToDoList.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {ToDoList[i]}");
+            }
+
+            Console.Write("\nWhich task you want to remove?: ");
+            int removingTask = Convert.ToInt32(Console.ReadLine());//se tiver fora do scopo, trow exe, ou alguma condição
+
+            ToDoList.RemoveAt(removingTask);//if its out of range, trow exep ?? idk may try it later
+
         }
 
     }
