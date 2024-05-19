@@ -2,18 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 
-//faça uma coisa de cada vez, se fizer 900 coisas ao mesmo tempo, sai tudo errado na hora de manejar
-
-
-//to_do: 
-/* username and check if its empty or not (if it is, just put default or ask if it wants default, whatever) (done)
- * make the current task list and the completed task list (and maybe a removed tasks list? idk) (done)
- * function to ask the user to add a new task to the current one (done)
- * function to ask if the user wants to see the current task list (done)
- * func. to ask if the user wants to remove a task (done)
- * func. to ask what the user wants to do (the first thing this should be) (done)
- * ask if the user wants to mark as completed any task on the current task list, remove it of current list to add to completed one
- */
 namespace To_do_List
 {
     class Program
@@ -43,7 +31,7 @@ namespace To_do_List
 
             if (string.IsNullOrEmpty(person.Name))
             {
-                person.Name = "Default-user";//nn pensei em nada melhor
+                person.Name = "Default-user";
             }
 
             Console.WriteLine("User logged: {0}", person.Name);
@@ -60,7 +48,7 @@ namespace To_do_List
                 Console.Write("What you gonna do?: ");
                 string userChoose = Console.ReadLine();
 
-                if (userChoose == "1")//acho q tem um jeito mais inteligente para nn ficar repetindo isso
+                if (userChoose == "1")
                 {
                     CurrentTaskList();
                 }
@@ -76,7 +64,7 @@ namespace To_do_List
                 {
                     CompletedTasksFromCurrentList();
                 }
-                else if (userChoose == "E" || userChoose == "e")//fazer o comparativo (tolower etc), em vez de um ou outro
+                else if (userChoose == "E" || userChoose == "e")
                 {
                     CloseProgram();
                     onCheck = false;
@@ -94,7 +82,7 @@ namespace To_do_List
 
         static void CurrentTaskList()
         {
-            if (ToDoList.Count == 0 || ToDoList == null)//tem jeitos melhores de abordar isso
+            if (ToDoList.Count == 0 || ToDoList == null)
             {
                 Console.WriteLine("You dont have any tasks on the current list yet. . .\n");
             }
@@ -115,9 +103,9 @@ namespace To_do_List
                     Console.Write("Which one?: ");
                     int value = Convert.ToInt32(Console.ReadLine());
 
-                    string s = ToDoList[value - 1];
+                    string s = ToDoList[value - 1];//nn achei um jeito de lidar com esse e o de baixo ainda
 
-                    ToDoList.RemoveAt(value - 1);
+                    ToDoList.RemoveAt(value - 1);//e tenho q usar try catch pra parar de dar errros
                     CompletedList.Add(s);
 
                     Console.WriteLine($"Task ({s}) marked as completed!!\n");
