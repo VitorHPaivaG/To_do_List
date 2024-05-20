@@ -88,7 +88,7 @@ namespace To_do_List
 
             if (ToDoList.Count.Equals(0))
             {
-                Console.WriteLine("Your current task list is empty. . . Time to add some tasks!!");
+                Console.WriteLine("Your current task list is empty. . . Time to add some tasks!!\n");
             }
 
             else
@@ -116,6 +116,8 @@ namespace To_do_List
                         CompletedList.Add(removeValueByIndex);
 
                         Console.WriteLine($"Task ({removeValueByIndex}) marked as completed!!\n");
+
+                        onWork = false;
                     }
                     else if (userChoose.Equals("N"))
                     {
@@ -176,7 +178,7 @@ namespace To_do_List
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("This value has not been found!! Please try again!");
                 }
             }
 
