@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 
+//things are starting to get a bit messy, maybe im gonna allocate these bunch of functions to some classes
+
 namespace To_do_List
 {
     class Program
@@ -31,10 +33,10 @@ namespace To_do_List
 
             if (string.IsNullOrEmpty(person.Name))
             {
-                person.Name = "Default-user";
+                person.Name = "Guest-User";
             }
 
-            Console.WriteLine("User logged: {0}", person.Name);
+            Console.WriteLine("\nUser logged: {0}", person.Name);
 
             while (onCheck)
             {
@@ -45,8 +47,8 @@ namespace To_do_List
                 Console.WriteLine("E. Close the program");
                 Console.WriteLine(" \n");
 
-                Console.Write("What you gonna do?: ");
-                string userChoose = Console.ReadLine();
+                Console.Write("What you´re gonna do?: ");
+                string userChoose = Console.ReadLine().ToUpper();
 
                 if (userChoose == "1")
                 {
@@ -64,7 +66,7 @@ namespace To_do_List
                 {
                     CompletedTasksFromCurrentList();
                 }
-                else if (userChoose == "E" || userChoose == "e")
+                else if (userChoose.Equals("E"))
                 {
                     CloseProgram();
                     onCheck = false;
@@ -82,13 +84,16 @@ namespace To_do_List
 
         static void CurrentTaskList()
         {
-            if (ToDoList.Count == 0 || ToDoList == null)
+            bool onWork = true;
+
+            if (ToDoList.Count.Equals(0))
             {
-                Console.WriteLine("You dont have any tasks on the current list yet. . .\n");
+                Console.WriteLine("Your current task list is empty. . . Time to add some tasks!!");
             }
+
             else
             {
-                Console.WriteLine($"Your current list has {ToDoList.Count} tasks on it:\n");//check if its null or empty
+                Console.WriteLine($"Your current list has ({ToDoList.Count}) tasks on it:\n");//check if its null or empty
 
                 for (int i = 0; i < ToDoList.Count; i++)
                 {
@@ -96,31 +101,36 @@ namespace To_do_List
                 }
 
                 Console.WriteLine("\nWants to mark any task as completed? [Y/N]: ");
-                string userChoose = Console.ReadLine();
+                string userChoose = Console.ReadLine().ToUpper();
 
-                if (userChoose == "Y" || userChoose == "y")
+                while (onWork)
                 {
-                    Console.Write("Which one?: ");
-                    int value = Convert.ToInt32(Console.ReadLine());
+                    if (userChoose.Equals("Y"))
+                    {
+                        Console.Write("Which one?: ");
+                        int value = Convert.ToInt32(Console.ReadLine());
 
-                    string s = ToDoList[value - 1];//nn achei um jeito de lidar com esse e o de baixo ainda
+                        string removeValueByIndex = ToDoList[value - 1];
 
-                    ToDoList.RemoveAt(value - 1);//e tenho q usar try catch pra parar de dar errros
-                    CompletedList.Add(s);
+                        ToDoList.RemoveAt(value - 1);
+                        CompletedList.Add(removeValueByIndex);
 
-                    Console.WriteLine($"Task ({s}) marked as completed!!\n");
-                }
-                else if (userChoose == "N" || userChoose == "n")
-                {
-                    Console.WriteLine("Press enter to continue. . .");//achar um meio de nn ficar repetindo isso
-                    Console.ReadKey();
-                    Console.Clear();
-                }
-                else
-                {
-                    Console.WriteLine("Wrong parameter, please try again. . .");//fazer depois o while
-                    Console.ReadKey();
-                    Console.Clear();
+                        Console.WriteLine($"Task ({removeValueByIndex}) marked as completed!!\n");
+                    }
+                    else if (userChoose.Equals("N"))
+                    {
+                        Console.WriteLine("Press enter to continue. . .");//achar um meio de nn ficar repetindo isso
+                        Console.ReadKey();
+                        Console.Clear();
+                        onWork = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Wrong parameter, please try again. . .");
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+
                 }
             }
         }
@@ -142,7 +152,7 @@ namespace To_do_List
         //sla se é uma boa ideia isso, ou poderia embutir o currenttasklist a esse, porem esse apenas remove e ñ printa nada
         static void RemovingFromCurrentList()
         {
-            if (ToDoList.Count == 0)//seria index 0 ou valor 0?
+            if (ToDoList.Count == 0)
             {
                 Console.WriteLine("The current list is empty! Add some tasks. . .");
             }
@@ -155,12 +165,19 @@ namespace To_do_List
                     Console.WriteLine($"{i + 1}. {ToDoList[i]}");
                 }
 
-                Console.Write("\nWhich task you want to remove?: ");
-                int removingTask = Convert.ToInt32(Console.ReadLine());//se tiver fora do scopo, trow exe, ou alguma condição
+                try//lindo
+                {
+                    Console.Write("\nWhich task you want to remove?: ");
+                    int removingTask = Convert.ToInt32(Console.ReadLine());
 
-                ToDoList.RemoveAt(removingTask - 1);//if its out of range, trow exep ?? idk may try it later
+                    ToDoList.RemoveAt(removingTask - 1);
 
-                Console.WriteLine("Task removed.");
+                    Console.WriteLine("Task removed.");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
 
             Console.WriteLine("Press enter to continue. . .");
