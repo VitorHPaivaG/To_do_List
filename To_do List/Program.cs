@@ -176,7 +176,7 @@ namespace To_do_List
 
                     Console.WriteLine("Task removed.");
                 }
-                catch (Exception e)
+                catch
                 {
                     Console.WriteLine("This value has not been found!! Please try again!");
                 }
