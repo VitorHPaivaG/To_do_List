@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 
 //things are starting to get a bit messy, maybe im gonna allocate these bunch of functions to some classes
+
+//considered done by now, time to shift between projects and learn new things.
 
 namespace To_do_List
 {
@@ -18,12 +19,10 @@ namespace To_do_List
             public Person() { }
             public Person(string name) { Name = name; }
         }
-
         static void Main()
         {
             Person person = new Person();
             bool onCheck = true;
-            int clearingConsole = 500;
 
             Console.Title = "Console to-do list";
 
@@ -36,7 +35,7 @@ namespace To_do_List
                 person.Name = "Guest-User";
             }
 
-            Console.WriteLine("\nUser logged: {0}", person.Name);
+            Console.WriteLine($"\nUser logged: {person.Name}");
 
             while (onCheck)
             {
@@ -44,11 +43,10 @@ namespace To_do_List
                 Console.WriteLine("2. Add a new task to the current task list");
                 Console.WriteLine("3. Remove a task from the current task list");
                 Console.WriteLine("4. See all the completed tasks");
-                Console.WriteLine("E. Close the program");
-                Console.WriteLine(" \n");
+                Console.WriteLine("E. Close the program\n");
 
                 Console.Write("What you´re gonna do?: ");
-                string userChoose = Console.ReadLine().ToUpper();
+                string userChoose = Console.ReadLine();
 
                 if (userChoose == "1")
                 {
@@ -66,34 +64,26 @@ namespace To_do_List
                 {
                     CompletedTasksFromCurrentList();
                 }
-                else if (userChoose.Equals("E"))
+                else if (userChoose.ToUpper().Equals("E"))
                 {
                     CloseProgram();
                     onCheck = false;
                 }
-
                 else
                 {
-                    Console.WriteLine("\nWrong parameter, press enter to try again. . .");
-                    Console.ReadKey();
-                    Thread.Sleep(clearingConsole);
-                    Console.Clear();
+                    DefaultMessage("\nWrong parameter, press enter to try again. . .");
                 }
             }
         }
-
         static void CurrentTaskList()
         {
-            bool onWork = true;
-
             if (ToDoList.Count.Equals(0))
             {
                 Console.WriteLine("Your current task list is empty. . . Time to add some tasks!!\n");
             }
-
             else
             {
-                Console.WriteLine($"Your current list has ({ToDoList.Count}) tasks on it:\n");//check if its null or empty
+                Console.WriteLine($"Your current list has ({ToDoList.Count}) tasks on it:\n");
 
                 for (int i = 0; i < ToDoList.Count; i++)
                 {
@@ -101,11 +91,11 @@ namespace To_do_List
                 }
 
                 Console.WriteLine("\nWants to mark any task as completed? [Y/N]: ");
-                string userChoose = Console.ReadLine().ToUpper();
+                string userChoose = Console.ReadLine().ToLower();
 
-                while (onWork)
+                try
                 {
-                    if (userChoose.Equals("Y"))
+                    if (userChoose.Equals("y"))
                     {
                         Console.Write("Which one?: ");
                         int value = Convert.ToInt32(Console.ReadLine());
@@ -117,26 +107,22 @@ namespace To_do_List
 
                         Console.WriteLine($"Task ({removeValueByIndex}) marked as completed!!\n");
 
-                        onWork = false;
                     }
-                    else if (userChoose.Equals("N"))
+                    else if (userChoose.Equals("n"))
                     {
-                        Console.WriteLine("Press enter to continue. . .");//achar um meio de nn ficar repetindo isso
-                        Console.ReadKey();
-                        Console.Clear();
-                        onWork = false;
+                        DefaultMessage("Press enter to continue. . .");
                     }
                     else
                     {
-                        Console.WriteLine("Wrong parameter, please try again. . .");
-                        Console.ReadKey();
-                        Console.Clear();
+                        DefaultMessage("Wrong parameter, please try again. . .");
                     }
-
+                }
+                catch
+                {
+                    DefaultMessage("The index is out of range, please try again!");
                 }
             }
         }
-
         static void AddingToCurrentTaskList()
         {
             Console.Write("Please enter the task: ");
@@ -145,13 +131,8 @@ namespace To_do_List
 
             Console.WriteLine("Task added succesfully!");
 
-            Console.WriteLine("Press enter to continue. . .");//achar um meio de nn ficar repetindo isso
-            Console.ReadKey();
-
-            Console.Clear();
+            DefaultMessage("Press enter to continue. . .");
         }
-
-        //sla se é uma boa ideia isso, ou poderia embutir o currenttasklist a esse, porem esse apenas remove e ñ printa nada
         static void RemovingFromCurrentList()
         {
             if (ToDoList.Count == 0)
@@ -167,7 +148,7 @@ namespace To_do_List
                     Console.WriteLine($"{i + 1}. {ToDoList[i]}");
                 }
 
-                try//lindo
+                try
                 {
                     Console.Write("\nWhich task you want to remove?: ");
                     int removingTask = Convert.ToInt32(Console.ReadLine());
@@ -181,12 +162,8 @@ namespace To_do_List
                     Console.WriteLine("This value has not been found!! Please try again!");
                 }
             }
-
-            Console.WriteLine("Press enter to continue. . .");
-            Console.ReadKey();
-            Console.Clear();
+            DefaultMessage("Press enter to continue. . .");
         }
-
         static void CompletedTasksFromCurrentList()
         {
             if (CompletedList.Count == 0)
@@ -195,7 +172,7 @@ namespace To_do_List
             }
             else
             {
-                Console.WriteLine($"you´ve got {CompletedList.Count} tasks done by now");
+                Console.WriteLine($"you´ve got ({CompletedList.Count}) tasks done by now");
 
                 for (int i = 0; i < CompletedList.Count; i++)
                 {
@@ -203,17 +180,18 @@ namespace To_do_List
                 }
             }
 
-            //c pa posso tranformar isso em uma função, e só chamar ela na hora das escolhas qnd encerrar nessa ou em outras
-            //funções
-            Console.WriteLine("Press enter to continue. . .");
-            Console.ReadKey();
-            Console.Clear();
+            DefaultMessage("Press enter to continue. . .");
         }
-
         static void CloseProgram()
         {
             Console.WriteLine("Thanks for using, press any key to close the program. . .");
             Console.ReadKey();
+        }
+        static void DefaultMessage(string message)
+        {
+            Console.WriteLine(message);
+            Console.ReadKey();
+            Console.Clear();
         }
 
     }
